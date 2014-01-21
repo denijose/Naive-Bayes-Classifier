@@ -1,5 +1,7 @@
 package com.nblearn;
 
+import java.io.IOException;
+
 public class Main {
 
 	/**
@@ -7,7 +9,12 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		
-		FormatInput.createTrainingDataFile();
+		try {
+			FormatInput.createTrainingDataFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

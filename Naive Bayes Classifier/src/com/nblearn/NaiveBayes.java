@@ -4,12 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+import com.google.gson.Gson;
 
 public class NaiveBayes {
 	  
@@ -33,9 +32,13 @@ public class NaiveBayes {
 					//create the category if the category is a new one
 					if(!wareHouse.category_NoOfWordsMap.containsKey(category)){
 						wareHouse.category_NoOfWordsMap.put(category, 0);
+						wareHouse.category_FrequencyMap.put(category, 0);
 						wareHouse.createCategoryMap(category);						
 					}			
-					
+					// increment the frequency of the category occuring
+					int categoryFrequency = wareHouse.category_FrequencyMap.get(category);
+					categoryFrequency++;
+					wareHouse.category_FrequencyMap.put(category, categoryFrequency);
 					for(int i=1; i<words.length; i++ ){
 							if(words[i].equals(" ") || words[i].equals("") || words[i].equals(".") )
 								continue;
@@ -95,10 +98,6 @@ public class NaiveBayes {
 	
 	public  void categorize(String trainingFileName) {
 		wareHouse = new WareHouse();
-		HashMap<String, Integer> category_NoOfWordsMap = new HashMap<String, Integer>();
-		HashMap<String, HashMap<String, ArrayList<Double>> > category_CategoryMap = new HashMap<String, HashMap<String, ArrayList<Double>> >();
-		wareHouse.setCategory_NoOfWordsMap(category_NoOfWordsMap);
-		wareHouse.setCategory_CategoryMap(category_CategoryMap);
 		
 		createProbMaps(trainingFileName);
 		//System.out.println(spamMap.get("schedule").get(0));
@@ -118,17 +117,15 @@ public class NaiveBayes {
 		System.out.println(map.toString());
 		
 		  try {
-			  
-				File file = new File("C:\\D Drive\\KNOWLEDGE IS POWER\\NLP\\HW1 Spam Filter and Sentiment Analysis\\test\\nb.xml");
-				JAXBContext jaxbContext = JAXBContext.newInstance(WareHouse.class);
-				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-		 		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		 		jaxbMarshaller.marshal(wareHouse, file);
-				jaxbMarshaller.marshal(wareHouse, System.out);
-		 
-			      } catch (JAXBException e) {
+			  Gson gson = new Gson();
+			  String json = gson.toJson(wareHouse);
+			  FileWriter writer = new FileWriter("C:\\D Drive\\KNOWLEDGE IS POWER\\NLP\\HW1 Spam Filter and Sentiment Analysis\\test\\spam.nb");
+			  writer.write(json);
+				writer.close();
+				System.out.println(json);
+			      } catch (Exception e) {
 				e.printStackTrace();
 			      }
-		
+		  
 	}
 }

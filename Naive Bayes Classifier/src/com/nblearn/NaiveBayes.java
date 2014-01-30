@@ -40,8 +40,9 @@ public class NaiveBayes {
 					categoryFrequency++;
 					wareHouse.category_FrequencyMap.put(category, categoryFrequency);
 					for(int i=1; i<words.length; i++ ){
-							if(words[i].equals(" ") || words[i].equals("") || words[i].equals(".") )
-								continue;
+//							if(words[i].equals(" ") || words[i].equals("") || words[i].equals(".") )
+//								continue;
+						    wareHouse.vocabulary.add(words[i]);
 							//increment the no. of words
 							int totalNoOfWordsinCategory = wareHouse.category_NoOfWordsMap.get(category);
 							totalNoOfWordsinCategory++;
@@ -71,10 +72,11 @@ public class NaiveBayes {
     	for(String category : wareHouse.category_NoOfWordsMap.keySet()){
     		HashMap<String, ArrayList<Double>> map = wareHouse.category_CategoryMap.get(category); 
     		int totalNoOfWordsinCategory = wareHouse.category_NoOfWordsMap.get(category);
+    		int vocabSize = wareHouse.vocabulary.size();
     		for(String word : map.keySet()){
     			ArrayList<Double> countAndProbability = map.get(word);
     			double wordFrequency =  countAndProbability.get(0);
-    			double prob = Math.log10(wordFrequency/totalNoOfWordsinCategory);
+    			double prob = Math.log(wordFrequency+1/totalNoOfWordsinCategory+vocabSize);
     			countAndProbability.add(1, prob);
     			map.put(word, countAndProbability);
     		}
@@ -101,28 +103,14 @@ public class NaiveBayes {
 		
 		createProbMaps(trainingFileName);
 		//System.out.println(spamMap.get("schedule").get(0));
-		System.out.println(wareHouse.category_NoOfWordsMap.toString());
-		String category = "SPAM";
-		HashMap<String, ArrayList<Double>> map = wareHouse.category_CategoryMap.get(category);
-		System.out.println(map.get("virtual").get(0));
-		System.out.println(wareHouse.category_NoOfWordsMap.get(category));
-		System.out.println(map.get("virtual").get(1));
-		System.out.println(map.toString());
-		
-		category = "HAM";
-		map = wareHouse.category_CategoryMap.get(category);
-		System.out.println(map.get("hourahead").get(0));
-		System.out.println(wareHouse.category_NoOfWordsMap.get(category));
-		System.out.println(map.get("hourahead").get(1));
-		System.out.println(map.toString());
 		
 		  try {
 			  Gson gson = new Gson();
 			  String json = gson.toJson(wareHouse);
-			  FileWriter writer = new FileWriter("C:\\D Drive\\KNOWLEDGE IS POWER\\NLP\\HW1 Spam Filter and Sentiment Analysis\\test\\spam.nb");
+			  FileWriter writer = new FileWriter("C:\\D Drive\\KNOWLEDGE IS POWER\\NLP\\HW1 Spam Filter and Sentiment Analysis\\spam.nb");
 			  writer.write(json);
 				writer.close();
-				System.out.println(json);
+				//System.out.println(json);
 			      } catch (Exception e) {
 				e.printStackTrace();
 			      }

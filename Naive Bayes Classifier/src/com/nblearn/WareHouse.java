@@ -3,6 +3,7 @@ package com.nblearn;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -14,10 +15,10 @@ public class WareHouse implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	   HashMap<String, Integer> category_NoOfWordsMap;
-	   HashMap<String, Integer> category_FrequencyMap;
-	   HashMap<String, HashMap<String, ArrayList<Double>> > category_CategoryMap;
-	   Set<String> vocabulary;
+	   public HashMap<String, Integer> category_NoOfWordsMap;
+	   public HashMap<String, Integer> category_FrequencyMap;
+	   public HashMap<String, HashMap<String, ArrayList<Double>> > category_CategoryMap;
+	   public Set<String> vocabulary;
 	
 	
 	
@@ -25,7 +26,7 @@ public class WareHouse implements Serializable{
 		category_NoOfWordsMap = new HashMap<String, Integer>();
 		category_CategoryMap = new HashMap<String, HashMap<String, ArrayList<Double>> >();
 		category_FrequencyMap = new HashMap<String, Integer>();
-		//vocabulary = new Set<String>();
+		vocabulary = new HashSet<String>();
 	}
 
 	

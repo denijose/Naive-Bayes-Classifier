@@ -2,8 +2,8 @@ package com.nbclassify;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,12 +13,32 @@ import com.nblearn.WareHouse;
 public class NaiveBayesClassify {
 	
 	private WareHouse wareHouse;
+	private HashMap<String,Double> category_priorProbMap;
+	
+	public NaiveBayesClassify(){
+		category_priorProbMap = new HashMap<String, Double>();
+	}
 
-	public ArrayList<String> classify(File input, File model){
+	public ArrayList<String> classify(String fileName, String modelName){
 		//convert the json file into WareHouse object
-		getWareHouseInstance(input);
+		getWareHouseInstance(modelName);
+		
+		double temp = 0;
+		
 		//get the no. of categories that were made from the warehouse object and create a category-prob map which will be reused
 		HashMap<String,Double> category_probMap = new HashMap<String,Double>();
+		for(String category : wareHouse.category_FrequencyMap.keySet()){
+			category_probMap.put(category, (double)0);
+			temp += wareHouse.category_FrequencyMap.get(category);
+		}	
+		
+		//get the prior prob into a map
+		double priorProb = 0;
+		for(String category : wareHouse.category_FrequencyMap.keySet()){
+		    priorProb = wareHouse.category_FrequencyMap.get(category)/temp;
+		    priorProb = Math.log(priorProb);
+			category_priorProbMap.put(category, priorProb);
+		}	
 		
 		//create an arraList to store the classifications for each document(line)
 		ArrayList<String> classification = new ArrayList<String>();
@@ -26,7 +46,7 @@ public class NaiveBayesClassify {
 		//read the file line by line and for each line {
 	    BufferedReader br = null;
 	    try{
-	    	br = new BufferedReader(new FileReader(input));
+	    	br = new BufferedReader(new FileReader(fileName));
 	    	String line;
 	    	int documentNo = 0;
 	    	while((line = br.readLine()) != null){
@@ -41,10 +61,12 @@ public class NaiveBayesClassify {
 	    			
 	    			// get the max prob and put the category into the arrayList
 	    			double max = 0;
+	    			classification.add(documentNo, "");
 	    			for(String category : category_probMap.keySet())
 	    				if(category_probMap.get(category) > max ){
 	    					max = category_probMap.get(category);
-	    					classification.set(documentNo, category); 					
+	    					classification.set(documentNo, category);
+	    					
 	    				}
 	    			documentNo++;		
 	    		}
@@ -52,34 +74,48 @@ public class NaiveBayesClassify {
 	    		
 	    	
 	    }catch(Exception e){
-	    	e.printStackTrace();
+	    	try {
+				e.printStackTrace();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 	    } finally{
-	    	br.close();
+	    	try {
+				br.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    	
 	    }
-
-	      
-		return classification;
+	    return classification;
 	
 	}
 	
 	private double findCondProbOfCategoryGivenDoc(String[] words, String category){
 		double condProbOfCategoryGivenDoc = 0;
 		double condProbOfWordGivenCategory = 0;
+		ArrayList<Double> countAndProb = new ArrayList<Double>();
 		for(String word : words){
-			condProbOfWordGivenCategory = get from warehouse;
+			//check if the word exists in the map
+			if((countAndProb=wareHouse.category_CategoryMap.get(category).get(word)) == null ){
+				
+				continue;
+			}	
+			condProbOfWordGivenCategory = countAndProb.get(1);
 			condProbOfCategoryGivenDoc += condProbOfWordGivenCategory;
 		}
 		//finally add the prior prob of category 
-		condProbOfCategoryGivenDoc += get from warehouse
+		condProbOfCategoryGivenDoc += category_priorProbMap.get(category);
 		return condProbOfCategoryGivenDoc;
 		
 	}
 	
-	private void getWareHouseInstance(File file){
+	private void getWareHouseInstance(String fileName){
 		Gson gson = new Gson();
 		try {
-			BufferedReader br = new BufferedReader(new FileReader("C:\\D Drive\\KNOWLEDGE IS POWER\\NLP\\HW1 Spam Filter and Sentiment Analysis\\test\\spam.nb"));
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			wareHouse = gson.fromJson(br, WareHouse.class);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -9,36 +9,37 @@ import java.io.IOException;
 
 public class FormatInput {
 	
-	public static void createTrainingDataFile() throws IOException{
+	public static void createTrainingDataFile(String outPutFileName, String dirName, String purpose) throws IOException{
 		BufferedReader br = null;
 		BufferedWriter bw = null;
-		File dir = new File("C:\\D Drive\\KNOWLEDGE IS POWER\\NLP\\HW1 Spam Filter and Sentiment Analysis\\test");
-    	File spamTrainingFile = new File("C:\\D Drive\\KNOWLEDGE IS POWER\\NLP\\HW1 Spam Filter and Sentiment Analysis\\test\\spam_training.txt");
+		File dir = new File(dirName);
+    	File outPutFile = new File(outPutFileName);
 		
-    	if( spamTrainingFile.exists()){
-    		spamTrainingFile.delete();
-    		spamTrainingFile.createNewFile();
+    	if( outPutFile.exists()){
+    		outPutFile.delete();
+    		outPutFile.createNewFile();
     	}
-		
+    	outPutFile.createNewFile();
     	for(String fileName : dir.list()){    		
-			try{
-				
+			try{				
 				//check if the file being examined is the spam training file itself!!
-				if( (dir.getAbsolutePath() + "\\"+ fileName).equals(spamTrainingFile.getAbsolutePath()))
-				  continue;
+//				if( (dir.getAbsolutePath() + "\\"+ fileName).equals(outPutFile.getAbsolutePath()))
+//				  continue;
 				
 				System.out.println("Extracting text from " + dir.getAbsolutePath() + "\\"+ fileName + "...");
 				
 				br = new BufferedReader(new FileReader( dir.getAbsolutePath() + "\\"+ fileName) );
-				bw = new BufferedWriter(new FileWriter(spamTrainingFile.getAbsoluteFile(), true)); //open file for appending
+				bw = new BufferedWriter(new FileWriter(outPutFile.getAbsoluteFile(), true)); //open file for appending
 				String curLine = null;
 				String label = "yo";
 				if( fileName.toUpperCase().contains("SPAM"))
 					label = "SPAM";
-				if( fileName.toUpperCase().contains("HAM"))
+				else if( fileName.toUpperCase().contains("HAM"))
 					label = "HAM";
-				
-				bw.write(label + " ");
+				else
+					continue;
+				if(purpose.equalsIgnoreCase("training"))
+				   bw.write(label + " ");
 				while( (curLine = br.readLine()) != null )		    	
 			    	bw.write(" " + curLine);
 	

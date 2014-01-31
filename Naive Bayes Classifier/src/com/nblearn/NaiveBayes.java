@@ -31,12 +31,12 @@ public class NaiveBayes {
 					String category = words[0];
 					//create the category if the category is a new one
 					if(!wareHouse.category_NoOfWordsMap.containsKey(category)){
-						wareHouse.category_NoOfWordsMap.put(category, 0);
-						wareHouse.category_FrequencyMap.put(category, 0);
+						wareHouse.category_NoOfWordsMap.put(category,(double) 0);
+						wareHouse.category_FrequencyMap.put(category, (double)0);
 						wareHouse.createCategoryMap(category);						
 					}			
 					// increment the frequency of the category occuring
-					int categoryFrequency = wareHouse.category_FrequencyMap.get(category);
+					double categoryFrequency = wareHouse.category_FrequencyMap.get(category);
 					categoryFrequency++;
 					wareHouse.category_FrequencyMap.put(category, categoryFrequency);
 					for(int i=1; i<words.length; i++ ){
@@ -44,7 +44,7 @@ public class NaiveBayes {
 //								continue;
 						    wareHouse.vocabulary.add(words[i]);
 							//increment the no. of words
-							int totalNoOfWordsinCategory = wareHouse.category_NoOfWordsMap.get(category);
+							double totalNoOfWordsinCategory = wareHouse.category_NoOfWordsMap.get(category);
 							totalNoOfWordsinCategory++;
 							wareHouse.category_NoOfWordsMap.put(category, totalNoOfWordsinCategory);
 							UpdateCount(words[i], category);
@@ -71,12 +71,12 @@ public class NaiveBayes {
     private void UpdateProb(){
     	for(String category : wareHouse.category_NoOfWordsMap.keySet()){
     		HashMap<String, ArrayList<Double>> map = wareHouse.category_CategoryMap.get(category); 
-    		int totalNoOfWordsinCategory = wareHouse.category_NoOfWordsMap.get(category);
-    		int vocabSize = wareHouse.vocabulary.size();
+    		double totalNoOfWordsinCategory = wareHouse.category_NoOfWordsMap.get(category);
+    		double vocabSize = wareHouse.vocabulary.size();
     		for(String word : map.keySet()){
     			ArrayList<Double> countAndProbability = map.get(word);
     			double wordFrequency =  countAndProbability.get(0);
-    			double prob = Math.log(wordFrequency+1/totalNoOfWordsinCategory+vocabSize);
+    			double prob = Math.log((wordFrequency+1)/(totalNoOfWordsinCategory+vocabSize));
     			countAndProbability.add(1, prob);
     			map.put(word, countAndProbability);
     		}
@@ -98,7 +98,7 @@ public class NaiveBayes {
 		map.put(word,countAndProbability);
 	} 
 	
-	public  void categorize(String trainingFileName) {
+	public  void learn(String trainingFileName) {
 		wareHouse = new WareHouse();
 		
 		createProbMaps(trainingFileName);

@@ -6,14 +6,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class FormatInput {
 	
-	public static void createTrainingDataFile(String outPutFileName, String dirName, String purpose) throws IOException{
+	public static ArrayList<String> createTrainingorTestDataFile(String outPutFileName, String dirName, String purpose) throws IOException{
 		BufferedReader br = null;
 		BufferedWriter bw = null;
 		File dir = new File(dirName);
     	File outPutFile = new File(outPutFileName);
+    	ArrayList<String> classification = new ArrayList<String>();
 		
     	if( outPutFile.exists()){
     		outPutFile.delete();
@@ -38,10 +40,12 @@ public class FormatInput {
 					label = "HAM";
 				else
 					continue;
+				//get the correct classification to calculate the f scores later
+				classification.add(label);
 				if(purpose.equalsIgnoreCase("training"))
 				   bw.write(label + " ");
 				while( (curLine = br.readLine()) != null )		    	
-			    	bw.write(" " + curLine);
+			    	bw.write(curLine);
 	
 				bw.write("\n");
 			}
@@ -61,6 +65,8 @@ public class FormatInput {
 		    }
 		
     	}
+    	
+    	return classification;
 	}
 	
 	

@@ -15,17 +15,17 @@ public class WareHouse implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	   public HashMap<String, Integer> category_NoOfWordsMap;
-	   public HashMap<String, Integer> category_FrequencyMap;
+	   public HashMap<String, Double> category_NoOfWordsMap;
+	   public HashMap<String, Double> category_FrequencyMap;
 	   public HashMap<String, HashMap<String, ArrayList<Double>> > category_CategoryMap;
 	   public Set<String> vocabulary;
 	
 	
 	
 	public WareHouse(){
-		category_NoOfWordsMap = new HashMap<String, Integer>();
+		category_NoOfWordsMap = new HashMap<String, Double>();
 		category_CategoryMap = new HashMap<String, HashMap<String, ArrayList<Double>> >();
-		category_FrequencyMap = new HashMap<String, Integer>();
+		category_FrequencyMap = new HashMap<String, Double>();
 		vocabulary = new HashSet<String>();
 	}
 

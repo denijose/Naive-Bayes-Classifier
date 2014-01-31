@@ -22,7 +22,7 @@ public class NaiveBayesClassify {
 	public ArrayList<String> classify(String fileName, String modelName){
 		//convert the json file into WareHouse object
 		getWareHouseInstance(modelName);
-		
+		System.out.println("vocab size = " + wareHouse.vocabulary.size());
 		double temp = 0;
 		
 		//get the no. of categories that were made from the warehouse object and create a category-prob map which will be reused
@@ -60,19 +60,15 @@ public class NaiveBayesClassify {
 	    			}
 	    			
 	    			// get the max prob and put the category into the arrayList
-	    			double max = 0;
+	    			double max = Double.NEGATIVE_INFINITY;
 	    			classification.add(documentNo, "");
 	    			for(String category : category_probMap.keySet())
 	    				if(category_probMap.get(category) > max ){
 	    					max = category_probMap.get(category);
 	    					classification.set(documentNo, category);
-	    					
 	    				}
 	    			documentNo++;		
 	    		}
-	    		
-	    		
-	    	
 	    }catch(Exception e){
 	    	try {
 				e.printStackTrace();
@@ -98,9 +94,10 @@ public class NaiveBayesClassify {
 		double condProbOfWordGivenCategory = 0;
 		ArrayList<Double> countAndProb = new ArrayList<Double>();
 		for(String word : words){
-			//check if the word exists in the map
+			//handling new words -
 			if((countAndProb=wareHouse.category_CategoryMap.get(category).get(word)) == null ){
-				
+				condProbOfWordGivenCategory = Math.log(1/(wareHouse.vocabulary.size()+ wareHouse.category_NoOfWordsMap.get(category)));
+				condProbOfCategoryGivenDoc += condProbOfWordGivenCategory;
 				continue;
 			}	
 			condProbOfWordGivenCategory = countAndProb.get(1);

@@ -33,13 +33,14 @@ public class FormatInput {
 				br = new BufferedReader(new FileReader( dir.getAbsolutePath() + "\\"+ fileName) );
 				bw = new BufferedWriter(new FileWriter(outPutFile.getAbsoluteFile(), true)); //open file for appending
 				String curLine = null;
-				String label = "yo";
-				if( fileName.toUpperCase().contains("SPAM"))
-					label = "SPAM";
-				else if( fileName.toUpperCase().contains("HAM"))
-					label = "HAM";
-				else
-					continue;
+				String[] array = fileName.split("\\.");
+				String label = array[0];
+//				if( fileName.toUpperCase().contains("SPAM"))
+//					label = "SPAM";
+//				else if( fileName.toUpperCase().contains("HAM"))
+//					label = "HAM";
+//				else
+//					continue;
 				//get the correct classification to calculate the f scores later
 				classification.add(label);
 				if(purpose.equalsIgnoreCase("training"))

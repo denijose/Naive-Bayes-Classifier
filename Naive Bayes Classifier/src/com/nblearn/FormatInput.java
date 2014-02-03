@@ -15,8 +15,8 @@ public class FormatInput {
 		BufferedWriter bw = null;
 		File dir = new File(dirName);
     	File outPutFile = new File(outPutFileName);
-    	ArrayList<String> classification = new ArrayList<String>();
-		
+    	ArrayList<String> classification = new ArrayList<String>(); 	
+    		
     	if( outPutFile.exists()){
     		outPutFile.delete();
     		outPutFile.createNewFile();
@@ -25,9 +25,8 @@ public class FormatInput {
     	for(String fileName : dir.list()){    		
 			try{				
 				//check if the file being examined is the spam training file itself!!
-//				if( (dir.getAbsolutePath() + "\\"+ fileName).equals(outPutFile.getAbsolutePath()))
-//				  continue;
-				
+				if( (dir.getAbsolutePath() + "\\"+ fileName).equals(outPutFileName))
+				  continue;				
 				System.out.println("Extracting text from " + dir.getAbsolutePath() + "\\"+ fileName + "...");
 				
 				br = new BufferedReader(new FileReader( dir.getAbsolutePath() + "\\"+ fileName) );
@@ -35,15 +34,8 @@ public class FormatInput {
 				String curLine = null;
 				String[] array = fileName.split("\\.");
 				String label = array[0];
-//				if( fileName.toUpperCase().contains("SPAM"))
-//					label = "SPAM";
-//				else if( fileName.toUpperCase().contains("HAM"))
-//					label = "HAM";
-//				else
-//					continue;
-				//get the correct classification to calculate the f scores later
 				classification.add(label);
-				if(purpose.equalsIgnoreCase("training"))
+				if(purpose.contains("train"))
 				   bw.write(label + " ");
 				while( (curLine = br.readLine()) != null )		    	
 			    	bw.write(curLine);
@@ -66,7 +58,7 @@ public class FormatInput {
 		    }
 		
     	}
-    	
+    	System.out.println("Finished extracting all the text in to the file - " +  outPutFileName);
     	return classification;
 	}
 	

@@ -21,7 +21,6 @@ public class NaiveBayesClassify {
 	public ArrayList<String> classify(String fileName, String modelName){
 		//convert the json file into WareHouse object
 		getWareHouseInstance(modelName);
-		System.out.println("vocab size = " + wareHouse.vocabulary.size());
 		double temp = 0;
 		
 		//get the no. of categories that were made from the warehouse object and create a category-prob map which will be reused
@@ -70,17 +69,17 @@ public class NaiveBayesClassify {
 	    		}
 	    }catch(Exception e){
 	    	try {
-				e.printStackTrace();
+	    		System.out.println(e.getMessage());
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				System.out.println(e1.getMessage());
 			}
 	    } finally{
 	    	try {
 				br.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 	    	
 	    }
@@ -115,7 +114,7 @@ public class NaiveBayesClassify {
 			wareHouse = gson.fromJson(br, WareHouse.class);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 

@@ -9,14 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import com.google.gson.Gson;
 
-public class NaiveBayes {
-	  
-//      static HashMap<String, ArrayList<Double>> spamMap =  new HashMap<String, ArrayList<Double>>();
-//      static HashMap<String, ArrayList<Double>> hamMap =  new HashMap<String, ArrayList<Double>>();
-      
-//      static private int totalNoOfWordsInSpam = 0;
-//	  static private int totalNoOfWordsInHam = 0;
-	
+public class NaiveBayesLearn {
+
 	private  WareHouse wareHouse = null;
       
       private  void createProbMaps(String trainingFileName){ 	  
@@ -53,15 +47,15 @@ public class NaiveBayes {
 				
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			} catch(IOException e){
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			} finally{
 				try{
 					if( br != null )
 						br.close();
 				} catch(IOException e){
-					e.printStackTrace();
+				System.out.println(e.getMessage());
 				}	
 		    }
 	  		
@@ -97,22 +91,19 @@ public class NaiveBayes {
 		map.put(word,countAndProbability);
 	} 
 	
-	public  void learn(String trainingFileName) {
-		wareHouse = new WareHouse();
-		
-		createProbMaps(trainingFileName);
-		//System.out.println(spamMap.get("schedule").get(0));
-		
+	
+	public  void learn(String trainingFileName, String modelFile) {
+		wareHouse = new WareHouse();		
+		createProbMaps(trainingFileName);			
 		  try {
 			  Gson gson = new Gson();
 			  String json = gson.toJson(wareHouse);
-			  FileWriter writer = new FileWriter("C:\\D Drive\\KNOWLEDGE IS POWER\\NLP\\HW1 Spam Filter and Sentiment Analysis\\spam.nb");
+			  FileWriter writer = new FileWriter(modelFile);
 			  writer.write(json);
-				writer.close();
-				//System.out.println(json);
-			      } catch (Exception e) {
-				e.printStackTrace();
-			      }
-		  
+			  writer.close();
+		   } catch (Exception e) {
+			   System.out.println(e.getMessage());
+		   }
 	}
+	
 }

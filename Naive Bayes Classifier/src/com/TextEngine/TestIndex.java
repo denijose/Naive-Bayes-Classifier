@@ -10,10 +10,10 @@ public class TestIndex {
 
 	public static void main(String[] args) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		Indexer indexer = new Indexer("C:\\D Drive\\KNOWLEDGE IS POWER\\NLP\\HW1 Spam Filter and Sentiment Analysis\\Archive\\files", "indexOut");
+		Indexer indexer = new Indexer("C:\\D Drive\\KNOWLEDGE IS POWER\\NLP\\HW1 Spam Filter and Sentiment Analysis\\denis\\folder", "C:\\D Drive\\KNOWLEDGE IS POWER\\NLP\\HW1 Spam Filter and Sentiment Analysis\\indexOut");
 		indexer.index();		
 		TermProcessor processor = new TermProcessor();
-		processor.processDocument("indexOut");
+		processor.processDocument("C:\\D Drive\\KNOWLEDGE IS POWER\\NLP\\HW1 Spam Filter and Sentiment Analysis\\indexOut");
 		
 		
 	}

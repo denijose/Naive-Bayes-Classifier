@@ -1,6 +1,8 @@
 package com.TextEngine;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -25,22 +27,40 @@ public class TermProcessor {
 		
 		while (termEnum.next())
 		{
-			String term = termEnum.term().text();
+			String term = termEnum.term().text(); 
 			termList.add(term);
 		}
-		System.out.printf("%-20s %-4s\t %-4s\t %-4s\t %-4s\n","Term","D1","D2","D3","D4");
-		System.out.println("------------------------------------------------------------");
+		//System.out.printf("%-20s %-4s\t %-4s\t %-4s\t %-4s\n","Term","D1","D2","D3","D4");
+		//System.out.println("------------------------------------------------------------");
+		
+		//BufferedWriter bw = null;
+    	//File outPutFile = new File("C:\\Temp\\denisOut");
+		System.out.println(termList.size());
 		for (int i = 0; i < termList.size(); i++)
 		{
+			//bw = new BufferedWriter(new FileWriter(outPutFile, true));
+			
+			
+			System.out.println();
 			System.out.printf("%-20s",termList.get(i));
+			
 			String term = termList.get(i);
-			StringBuffer sb = new StringBuffer();
+			
+			//bw.write(term+ " ");
+			
 			for (int j = 0; j < reader.numDocs(); j++)
 			{
+				
+				//Double tfidf = getTFIDF(reader, term, "contents", j);
+				//bw.write(reader.document(j).toString() + " " +tfidf.toString() + " ");
+				System.out.printf("%4.2f\t",getTF(reader, term, "contents", j));
+				System.out.printf("%4.2f\t",getIDF(reader,  "contents", term));
 				System.out.printf("%4.2f\t",getTFIDF(reader, term, "contents", j));
+				//System.out.println();
 			}
-			System.out.println();
+			
 		}
+		//bw.close();
 	}
 	public double getTF(IndexReader reader, String term, String field, int docID) throws IOException
 	{

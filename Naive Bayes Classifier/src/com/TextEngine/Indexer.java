@@ -23,20 +23,16 @@ public class Indexer {
 		this.indexOutputDirectory = new File(outDirectory);
 	}
 
-	public void index() throws CorruptIndexException,
-			LockObtainFailedException, IOException {
+	public void index() throws CorruptIndexException, LockObtainFailedException, IOException {
 		Directory dir = FSDirectory.open(indexOutputDirectory);
 		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_31);
-		IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_31,
-				analyzer);
+		IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_31,analyzer);
 
 		IndexWriter writer = new IndexWriter(dir, iwc);
 
 		for (String f : sourceDirectory.list()) {
 			Document doc = new Document();
-			Field contentField = new Field("contents", new BufferedReader(
-					new InputStreamReader(new FileInputStream(sourceDirectory.getAbsolutePath()+"\\"+f), "UTF-8")),
-					Field.TermVector.YES);
+			Field contentField = new Field("contents", new BufferedReader(new InputStreamReader(new FileInputStream(sourceDirectory.getAbsolutePath()+"\\"+f), "UTF-8")),Field.TermVector.YES);
 			doc.add(contentField);
 			writer.addDocument(doc);
 		}

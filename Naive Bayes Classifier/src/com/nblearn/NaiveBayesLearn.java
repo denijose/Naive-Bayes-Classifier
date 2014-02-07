@@ -47,6 +47,7 @@ public class NaiveBayesLearn {
 				
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
+				e.printStackTrace();
 				System.out.println(e.getMessage());
 			} catch(IOException e){
 				System.out.println(e.getMessage());
